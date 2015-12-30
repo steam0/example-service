@@ -1,0 +1,19 @@
+{
+  "name": "home-kontrol",
+  "version": "1.0.0",
+  "description": "Home control system for use with telldus-live and philips-hue",
+  "main": "webapp.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/steam0/HomeKontrolApp.git"
+  },
+  "author": "Henrik Stene",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/steam0/HomeKontrolApp/issues"
+  },
+  "homepage": "https://github.com/steam0/HomeKontrolApp#readme"
+}
