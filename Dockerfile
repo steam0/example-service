@@ -15,6 +15,7 @@ RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
 # Go to app root
 WORKDIR /opt/app
 ADD webapp.js /opt/app
+ADD README.md /opt/app
 
 #Exposing ports
 EXPOSE 3000
