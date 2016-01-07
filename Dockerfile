@@ -1,24 +1,18 @@
-# Initialize
-FROM ubuntu
-MAINTAINER  Henrik Stene <hstene@me.com>
+# Download OS
+FROM    centos:centos6
 
-# Install nodejs
-RUN apt-get update
-RUN apt-get -y install nodejs
-RUN apt-get -y install npm
+# Enable Extra Packages for Enterprise Linux (EPEL) for CentOS
+RUN     yum install -y epel-release
 
-# Add file
-ADD package.json /tmp/package.json
-RUN cd /tmp && npm install
-RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
+# Install Node.js and npm
+RUN     yum install -y nodejs npm
 
-# Go to app root
-WORKDIR /opt/app
-ADD webapp.js /opt/app
-ADD README.md /opt/app
+# Install app dependencies
+COPY package.json /src/package.json
+RUN cd /src; npm install
 
-#Exposing ports
+# Bundle app source
+COPY webapp.js /src/
+
 EXPOSE 3000
-
-# Start NODE app
-CMD ["node", "webapp.js"]
+CMD ["node", "/src/webapp.js"]
