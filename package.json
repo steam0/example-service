@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/steam0/HomeKontrolApp/issues"
   },
-  "homepage": "https://github.com/steam0/HomeKontrolApp#readme"
+  "homepage": "https://github.com/steam0/HomeKontrolApp#readme",
+  "dependencies": {
+    "cors": "^2.7.1",
+    "express": "^4.3.2",
+    "hue-module": "^0.1.0",
+    "path": "^0.12.7",
+    "telldus-live": "^0.2.1"
+  }
 }
