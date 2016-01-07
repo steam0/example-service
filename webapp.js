@@ -5,7 +5,10 @@ var app = express();
 app.use(cors());
 
 var server = app.listen(3000, function() {
-	console.log('Server is listening');
+	var host = server.address().address;
+  	var port = server.address().port;
+
+	console.log('Server is listening at http://%s:%s', host, port);
 });
 
 /* Telldus API */
@@ -20,9 +23,8 @@ var publicKey    = 'FEHUVEW84RAFR5SP22RABURUPHAFRUNU';
 var privateKey   = 'ZUXEVEGA9USTAZEWRETHAQUBUR69U6EF';
 var token        = 'e7cb08c52b487e6c6393841dd9ae89760566db00d';
 var tokenSecret  = 'b113722d19c8b825f3a805fc65e8d68d';
-var cloud;
 
-cloud = new TelldusAPI.TelldusAPI({ publicKey  : publicKey
+var cloud = new TelldusAPI.TelldusAPI({ publicKey  : publicKey
                                   , privateKey : privateKey }).login(token, tokenSecret, function(err, user) {
 	if (!!err) {
   		return console.log('login error: ' + err.message);
