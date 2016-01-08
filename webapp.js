@@ -30,18 +30,30 @@ var cloud = new TelldusAPI.TelldusAPI({ publicKey  : publicKey
   		return console.log('login error: ' + err.message);
 	}
 	
-	console.log("Connected to the Telldus Live API");
+	console.log("Connected to Telldus Live API");
 }).on('error', function(err) {
 	console.log('background error: ' + err.message);
 });
 
 /* Hue API Keys */
-var hueAPIkey = "352b12401b73b8af87f56902124609f";
-var internalip = "192.168.0.10";
-var externalip = "84.208.132.246:9050";
-var hueip = internalip;
+var hueAPIkey = "352b12401b73b8af87f56902124609f"
+var internalip = "192.168.0.10"
+var externalip = "84.208.132.246:9050"
+var hueip = internalip
 
-//HueApi.load(hueip, hueAPIkey);
+/**
+var callback
+HueApi.discover(callback)
+
+if (callback) {
+	console.log(callback);
+}
+**/
+var hue_online = false
+// Use this
+/*HueApi.load(hueip, hueAPIkey, function(hue_online) {
+	hue_online = true;
+});*/
 
 
 /* Telldus REST api */
@@ -93,3 +105,150 @@ app.get('/client', function (request, response) {
 });
 
 /* Hue REST API */
+
+app.get('/hue/lights', function (request, response) {
+	console.log(request.query)
+	if (!hue_online) {
+		hue_error(response)
+		return
+	}
+	
+	HueApi.lights(function(lights) {
+		// Debug
+		console.log(lights)
+		response.status(200)
+		response.end(JSON.stringify(lights))
+	});
+});
+
+app.get('/hue/light', function (request, response) {
+	console.log(request.query)
+
+	if (!hue_online) {
+		hue_error(response)
+		return
+	}
+
+	var id = request.query.id	
+	HueApi.light(id, function(light) {
+		response.status(200)
+		response.end(JSON.stringify(light))
+	});
+});
+
+app.post('/hue/light', function(request, response) {
+	console.log("UPDATE light/POST");
+	console.log(request.query)
+	
+	if (!hue_online) {
+		hue_error(response, 500)
+		return
+	}
+	
+	var id = request.query.id
+	HueApi.light(id, function(light) {
+	
+		if (!light) {
+			hue_error(response, 404)
+			return
+		}
+		
+		if (request.query.state){
+			light.set({"on":request.query.state})
+		}
+		
+		if (request.query.bri) {
+			light.set({"bri":request.query.bri})
+		}
+		
+		HueApi.change(id, light)
+		
+		response.status(200)
+		response.end(JSON.stringify(light));
+	});
+});
+
+app.get('/hue/groups', function (request, response) {
+	console.log(request.query)
+	
+	if (!hue_online) {
+		hue_error(response)
+	}
+	
+	HueApi.groups(function(groups) {
+		// Debug
+		console.log(groups)
+		response.status(200)
+		response.end(JSON.stringify(groups))
+	});
+	
+	
+});
+
+app.get('/hue/group', function (request, response) {
+	console.log(request.query)
+	
+	if (!hue_online) {
+		hue_error(response)
+		return
+	}
+	
+	var id = request.query.id
+	HueApi.group(id, function(group) {
+	
+		if (!group) {
+			hue_error(response, 404)
+			return
+		}
+		
+		response.status(200)
+		response.end(JSON.stringify(group))
+	});
+});
+
+app.post('/hue/group', function (request, response) {
+	console.log(request.query)
+	
+	if (!hue_online) {
+		hue_error(response)
+		return
+	}
+	
+	var id = request.query.id
+	HueApi.group(id, function(group) {
+	
+		if (!group) {
+			hue_error(response, 404)
+			return
+		}
+		
+		// Iterate through every light in group?
+		
+		response.status(200)
+		response.end(JSON.stringify(group))
+	});
+});
+
+
+/*
+ * What we need:
+ * + Get all lights
+ * + Get all groups
+ * + Set state of light
+ * + Set state of group
+ * - Schedule light
+ * - Schedule group
+ * - Add new light
+ * - Remove light
+ */
+ 
+ function hue_error(response, errorCode) {
+ 	var error
+ 	if (errorCode == 500) {
+ 		error = "Internal Server Error - Request received but Hue Hub is not reachable"
+ 	} else if (errorCode == 404) {
+ 		error = "Not found - The requested element was not found"
+ 	}
+ 	console.log(error)
+ 	response.status(errorCode).send(error);
+ }
