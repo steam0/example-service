@@ -1,18 +1,22 @@
 #Download OS
-FROM   resin/rpi-raspbian
+FROM	resin/rpi-raspbian
 
-# Enable Extra Packages for Enterprise Linux (EPEL) for CentOS
-RUN     yum install -y epel-release
+# Install CURL
+RUN	apt-get update
+RUN 	apt-get install --yes curl
+RUN	curl -sL https://deb.nodesource.com/setup_5.x | bash -
 
 # Install Node.js and npm
-RUN     yum install -y nodejs npm
+RUN     apt-get install --yes nodejs
+RUN	apt-get install --yes build-essential
+RUN	apt-get install --yes npm
 
 # Install app dependencies
-COPY package.json /src/package.json
-RUN cd /src; npm install
+COPY 	package.json /src/package.json
+RUN 	cd /src; npm install
 
 # Bundle app source
-COPY webapp.js /src/
+COPY 	webapp.js /src/
 
 EXPOSE 3000
-CMD ["node", "/src/webapp.js"]
+CMD 	["node", "/src/webapp.js"]
