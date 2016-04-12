@@ -19,4 +19,4 @@ RUN 	cd /src; npm install
 COPY 	webapp.js /src/
 
 EXPOSE 3000
-CMD 	["node", "/src/webapp.js"]
+CMD 	["nodejs", "/src/webapp.js"]
