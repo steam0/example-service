@@ -16,7 +16,7 @@ var TelldusAPI = require('telldus-live');
 var path = require('path');
 
 /* Hue API */
-var HueApi = require('hue-module');
+var HueApi = require('node-hue-api').HueApi;
 
 /* Telldus API Keys */
 var publicKey    = 'FEHUVEW84RAFR5SP22RABURUPHAFRUNU';
@@ -37,7 +37,7 @@ var cloud = new TelldusAPI.TelldusAPI({ publicKey  : publicKey
 
 /* Hue API Keys */
 var hueAPIkey = "352b12401b73b8af87f56902124609f"
-var internalip = "192.168.0.10"
+var internalip = "10.0.1.3"
 var externalip = "84.208.132.246:9050"
 var hueip = internalip
 
@@ -51,10 +51,7 @@ if (callback) {
 **/
 var hue_online = false
 // Use this
-/*HueApi.load(hueip, hueAPIkey, function(hue_online) {
-	hue_online = true;
-});*/
-
+var api = new HueApi(hueip, hueAPIkey);
 
 /* Telldus REST api */
 app.get('/listClients', function (request, response) {
