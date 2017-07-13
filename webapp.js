@@ -41,15 +41,6 @@ var internalip = "10.0.1.3"
 var externalip = "84.208.132.246:9050"
 var hueip = internalip
 
-/**
-var callback
-HueApi.discover(callback)
-
-if (callback) {
-	console.log(callback);
-}
-**/
-var hue_online = false
 // Use this
 var api = new HueApi(hueip, hueAPIkey);
 
@@ -165,64 +156,66 @@ app.post('/hue/light', function(request, response) {
 	});
 });
 
+/**
+ * GET all groups
+ */
 app.get('/hue/groups', function (request, response) {
 	console.log(request.query)
-	
-	if (!hue_online) {
-		hue_error(response)
-	}
-	
-	HueApi.groups(function(groups) {
-		// Debug
+
+	HueApi.groups(function(err, result) {
+    	if (err) {
+    		throw err;	
+    	}
+
+    	// Debug
 		console.log(groups)
 		response.status(200)
-		response.end(JSON.stringify(groups))
+		response.end(JSON.stringify(result))
 	});
-	
-	
 });
 
+/**
+ * GET a single group
+ * {
+ *  id: 1	
+ * }
+ */
 app.get('/hue/group', function (request, response) {
 	console.log(request.query)
 	
-	if (!hue_online) {
-		hue_error(response)
-		return
-	}
-	
 	var id = request.query.id
-	HueApi.group(id, function(group) {
-	
-		if (!group) {
-			hue_error(response, 404)
-			return
-		}
-		
-		response.status(200)
-		response.end(JSON.stringify(group))
+
+	api.getGroup(id, function(err, result) {
+    	if (err) {
+    		throw err;
+    	}
+    	response.status(200)
+		response.end(JSON.stringify(result))
 	});
 });
 
-app.post('/hue/group', function (request, response) {
+/**
+ * POST a state to a specific group
+ * {
+ *	id: 1
+ *	brightness: 255
+ * }
+ */
+app.put('/hue/group', function (request, response) {
 	console.log(request.query)
 	
-	if (!hue_online) {
-		hue_error(response)
-		return
-	}
-	
-	var id = request.query.id
-	HueApi.group(id, function(group) {
-	
-		if (!group) {
-			hue_error(response, 404)
-			return
+	var id = request.query.id;
+	var brightness = request.query.brightness;
+
+	var state = HueApi.lightState.create().brightness(brightness);
+
+	HueApi.setGroupLightState(id, state, function (err, lights) {
+		if (err) {
+			hue_error(response, 404);
 		}
-		
-		// Iterate through every light in group?
-		
+
 		response.status(200)
-		response.end(JSON.stringify(group))
+		response.end(JSON.stringify(lights))
 	});
 });
 
