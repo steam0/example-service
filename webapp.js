@@ -74,6 +74,30 @@ app.get('/sensor', function (request, response) {
 	});
 });
 
+/**
+ * GET all heaters
+ */
+app.get('/heaters', function (request, response) {
+	console.log(request.query)
+
+	cloud.getDevices(function(err, devices) {
+  		if (!!err) {
+  			return console.log('getDevices: ' + err.message);
+  		}
+
+  		var heaters = [];
+
+  		devices.forEach(function(device) {
+  			if (device.name.startsWith("heater")) {
+  				device.name = device.name.replace("heater:", "");
+  				heaters.push(device);
+  			}
+		});
+
+  		response.end(JSON.stringify(heaters));
+	});
+});
+
 app.get('/client', function (request, response) {
 	console.log(request.query);
 	var device = request.query;
@@ -94,6 +118,9 @@ app.get('/client', function (request, response) {
 
 /* Hue REST API */
 
+/**
+ * GET all groups
+ */
 app.get('/hue/groups', function (request, response) {
 	console.log("GET all groups");
 	console.log(request.query);
