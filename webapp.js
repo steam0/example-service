@@ -158,7 +158,8 @@ app.get('/hue/group', function (request, response) {
 /**
  * POST a state to a specific group
  * {
- *	id: 1
+ *	id: 1,
+ *	state: 0,
  *	brightness: 255
  * }
  */
@@ -168,7 +169,13 @@ app.put('/hue/group', function (request, response) {
 	var id = request.query.id;
 	var brightness = request.query.brightness;
 
-	var state = HueApi.lightState.create().brightness(brightness);
+	if (request.query.on == "true") {
+		var state = HueApi.lightState.create().on().brightness(brightness);	
+	} else {
+		var state = HueApi.lightState.create().off().brightness(brightness);
+	}
+	
+	console.log(state);
 
 	api.setGroupLightState(id, state, function (err, lights) {
 		if (err) {
