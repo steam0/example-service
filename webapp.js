@@ -94,81 +94,15 @@ app.get('/client', function (request, response) {
 
 /* Hue REST API */
 
-app.get('/hue/lights', function (request, response) {
-	console.log(request.query)
-	if (!hue_online) {
-		hue_error(response)
-		return
-	}
-	
-	HueApi.lights(function(lights) {
-		// Debug
-		console.log(lights)
-		response.status(200)
-		response.end(JSON.stringify(lights))
-	});
-});
-
-app.get('/hue/light', function (request, response) {
-	console.log(request.query)
-
-	if (!hue_online) {
-		hue_error(response)
-		return
-	}
-
-	var id = request.query.id	
-	HueApi.light(id, function(light) {
-		response.status(200)
-		response.end(JSON.stringify(light))
-	});
-});
-
-app.post('/hue/light', function(request, response) {
-	console.log("UPDATE light/POST");
-	console.log(request.query)
-	
-	if (!hue_online) {
-		hue_error(response, 500)
-		return
-	}
-	
-	var id = request.query.id
-	HueApi.light(id, function(light) {
-	
-		if (!light) {
-			hue_error(response, 404)
-			return
-		}
-		
-		if (request.query.state){
-			light.set({"on":request.query.state})
-		}
-		
-		if (request.query.bri) {
-			light.set({"bri":request.query.bri})
-		}
-		
-		HueApi.change(id, light)
-		
-		response.status(200)
-		response.end(JSON.stringify(light));
-	});
-});
-
-/**
- * GET all groups
- */
 app.get('/hue/groups', function (request, response) {
-	console.log(request.query)
+	console.log("GET all groups");
+	console.log(request.query);
 
-	HueApi.groups(function(err, result) {
-    	if (err) {
-    		throw err;	
-    	}
+	api.groups(function(err, result) {
+    		if (err) hue_error(err);	
 
-    	// Debug
-		console.log(groups)
+    		// Debug
+		console.log(result)
 		response.status(200)
 		response.end(JSON.stringify(result))
 	});
@@ -181,15 +115,15 @@ app.get('/hue/groups', function (request, response) {
  * }
  */
 app.get('/hue/group', function (request, response) {
-	console.log(request.query)
+	console.log("GET single group");
+	console.log(request.query);
 	
 	var id = request.query.id
 
 	api.getGroup(id, function(err, result) {
-    	if (err) {
-    		throw err;
-    	}
-    	response.status(200)
+    		if (err) hue_error(err);
+
+    		response.status(200)
 		response.end(JSON.stringify(result))
 	});
 });
@@ -209,7 +143,7 @@ app.put('/hue/group', function (request, response) {
 
 	var state = HueApi.lightState.create().brightness(brightness);
 
-	HueApi.setGroupLightState(id, state, function (err, lights) {
+	api.setGroupLightState(id, state, function (err, lights) {
 		if (err) {
 			hue_error(response, 404);
 		}
