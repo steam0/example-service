@@ -16,7 +16,8 @@ var TelldusAPI = require('telldus-live');
 var path = require('path');
 
 /* Hue API */
-var HueApi = require('node-hue-api').HueApi;
+var hue = require('node-hue-api');
+var HueApi = hue.HueApi;
 
 /* Telldus API Keys */
 var publicKey    = 'FEHUVEW84RAFR5SP22RABURUPHAFRUNU';
@@ -169,10 +170,10 @@ app.put('/hue/group', function (request, response) {
 	var id = request.query.id;
 	var brightness = request.query.brightness;
 
-	if (request.query.on == "true") {
-		var state = HueApi.lightState.create().on().brightness(brightness);	
+	if (request.query.on === "true") {
+		var state = hue.lightState.create().on().brightness(brightness);	
 	} else {
-		var state = HueApi.lightState.create().off().brightness(brightness);
+		var state = hue.lightState.create().off().brightness(brightness);
 	}
 	
 	console.log(state);
