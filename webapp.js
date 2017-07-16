@@ -117,6 +117,13 @@ app.get('/client', function (request, response) {
 	});
 });
 
+app.put('/client', function (request, response) {
+	console.log(request.query);
+	console.log(request);
+
+	response.end();
+});
+
 /* Hue REST API */
 
 /**
