@@ -99,16 +99,37 @@ app.get('/heaters', function (request, response) {
 	});
 });
 
-app.get('/client', function (request, response) {
+app.get('/cameras', function (request, response) {
+        console.log(request.query)
+
+        cloud.getDevices(function(err, devices) {
+                if (!!err) {
+                        return console.log('getDevices: ' + err.message);
+                }
+
+                var heaters = [];
+
+                devices.forEach(function(device) {
+                        if (device.name.startsWith("camera")) {
+                                device.name = device.name.replace("camera:", "");
+                                heaters.push(device);
+                        }
+                });
+
+                response.end(JSON.stringify(heaters));
+        });
+});
+
+app.put('/client', function (request, response) {
 	console.log(request.query);
 	var device = request.query;
-	var onP
-	if (device.onP == "true") {
+	var onP = false;
+	if (device.on === "true") {
 		onP = true;
-	} else if (device.onP == "false") {
-		onP = false;
 	}
-	
+
+	console.log(device);
+	console.log(onP);	
 	cloud.onOffDevice(device, onP, function(err, result) {
 		if (!!err) {
 			return console.log('getDevice: ' + err.message);
@@ -117,10 +138,13 @@ app.get('/client', function (request, response) {
 	});
 });
 
-app.put('/client', function (request, response) {
+app.put('/client2', function (request, response) {
 	console.log(request.query);
-	console.log(request);
 
+	var state = {};
+	state.id = request.query.id;
+	
+	cloud.
 	response.end();
 });
 
