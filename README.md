@@ -1,5 +1,5 @@
-# hue-service
-Service to control hue functionality
+# example-service
+Service skeleton
 
 # Build
 docker build -t home-server-[c86|ARM] -f [x86|ARM]/Dockerfile .
