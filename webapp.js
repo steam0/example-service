@@ -29,7 +29,7 @@ var api = new HueApi(hueip, hueAPIkey);
 /**
  * GET all groups
  */
-app.get('/hue/groups', function (request, response) {
+app.get('/groups', function (request, response) {
 	console.log("GET all groups");
 	console.log(request.query);
 
@@ -49,7 +49,7 @@ app.get('/hue/groups', function (request, response) {
  *  id: 1
  * }
  */
-app.get('/hue/group', function (request, response) {
+app.get('/group', function (request, response) {
 	console.log("GET single group");
 	console.log(request.query);
 
@@ -71,7 +71,7 @@ app.get('/hue/group', function (request, response) {
  *	brightness: 255
  * }
  */
-app.put('/hue/group', function (request, response) {
+app.put('/group', function (request, response) {
 	console.log(request.query)
 
 	var id = request.query.id;
