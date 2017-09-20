@@ -109,12 +109,13 @@ app.put('/group', function (request, response) {
  */
 
  function hue_error(response, errorCode) {
- 	var error
+ 	var error = "Unknown error";
+	
  	if (errorCode == 500) {
  		error = "Internal Server Error - Request received but Hue Hub is not reachable"
  	} else if (errorCode == 404) {
  		error = "Not found - The requested element was not found"
  	}
- 	console.log(error)
+ 	console.log(errorCode + ": " + error)
  	response.status(errorCode).send(error);
  }
