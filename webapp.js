@@ -14,4 +14,6 @@ var server = app.listen(3000, function() {
 app.get('/test', function (request, response) {
 	console.log("Testing auth");
 	console.log(request.query);
+
+	response.end();
 });
