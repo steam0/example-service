@@ -1,26 +1,25 @@
 {
-  "name": "home-kontrol",
+  "name": "hue-service",
   "version": "1.0.0",
-  "description": "Home control system for use with telldus-live and philips-hue",
+  "description": "Service app to run hue api services",
   "main": "webapp.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/steam0/HomeKontrolApp.git"
+    "url": "git+https://github.com/steam0/hue-service.git"
   },
   "author": "Henrik Stene",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/steam0/HomeKontrolApp/issues"
+    "url": "https://github.com/steam0/hue-service/issues"
   },
-  "homepage": "https://github.com/steam0/HomeKontrolApp#readme",
+  "homepage": "https://github.com/steam0/hue-service#readme",
   "dependencies": {
     "cors": "^2.7.1",
     "express": "^4.3.2",
     "node-hue-api": "2.4.2",
-    "path": "^0.12.7",
-    "telldus-live": "^0.2.1"
+    "path": "^0.12.7"
   }
 }
