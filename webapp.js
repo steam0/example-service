@@ -98,9 +98,10 @@ app.put('/group', function (request, response) {
 
 /*
  * What we need:
- * + Get all lights
+ * - Get all lights
  * + Get all groups
- * + Set state of light
+ * + Get single group
+ * - Set state of light
  * + Set state of group
  * - Schedule light
  * - Schedule group
@@ -110,7 +111,7 @@ app.put('/group', function (request, response) {
 
  function hue_error(response, errorCode) {
  	var error = "Unknown error";
-	
+
  	if (errorCode == 500) {
  		error = "Internal Server Error - Request received but Hue Hub is not reachable"
  	} else if (errorCode == 404) {
