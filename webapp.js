@@ -21,8 +21,6 @@ var internalip = "10.0.1.3"
 var externalip = "84.208.132.246:9050"
 var hueip = internalip
 
-var serviceName = "/hue";
-
 // Use this
 var api = new HueApi(hueip, hueAPIkey);
 
@@ -31,7 +29,7 @@ var api = new HueApi(hueip, hueAPIkey);
 /**
  * GET all groups
  */
-app.get(serviceName+'/groups', function (request, response) {
+app.get('/hue/groups', function (request, response) {
 	console.log("GET all groups");
 	console.log(request.query);
 
@@ -51,7 +49,7 @@ app.get(serviceName+'/groups', function (request, response) {
  *  id: 1
  * }
  */
-app.get(serviceName+'/group', function (request, response) {
+app.get('/hue/group', function (request, response) {
 	console.log("GET single group");
 	console.log(request.query);
 
@@ -73,7 +71,7 @@ app.get(serviceName+'/group', function (request, response) {
  *	brightness: 255
  * }
  */
-app.put(serviceName+'/group', function (request, response) {
+app.put('/hue/group', function (request, response) {
 	console.log(request.query)
 
 	var id = request.query.id;
