@@ -1,5 +1,5 @@
-# HomeKontrolApp
-This is a home kontrol app
+# hue-service
+Service to control hue functionality
 
 # Build
 docker build -t home-server-[c86|ARM] -f [x86|ARM]/Dockerfile .
