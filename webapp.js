@@ -15,6 +15,12 @@ var server = app.listen(3000, function() {
 var hue = require('node-hue-api');
 var HueApi = hue.HueApi;
 
+/* Hue API Keys */
+var hueAPIkey = "352b12401b73b8af87f56902124609f"
+var internalip = "10.0.1.3"
+var externalip = "84.208.132.246:9050"
+var hueip = internalip
+
 // Use this
 var api = new HueApi(hueip, hueAPIkey);
 
