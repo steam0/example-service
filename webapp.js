@@ -33,6 +33,8 @@ app.get('/test', function (request, response) {
 
 
 function authorize(request, response, callback) {
+	console.log(response.headers);
+	
 	var options = {
 		url: 'http://localhost:3333/authorize',
 		method: 'GET',
