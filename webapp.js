@@ -15,7 +15,7 @@ var server = app.listen(3000, function() {
 // API
 
 app.get('/test', function (request, response) {
-	//console.log(request);
+	console.log(request.headers);
 	//console.log(request.query);
 
 	authorize(request, response, function (err, res, body) {
@@ -33,8 +33,8 @@ app.get('/test', function (request, response) {
 
 
 function authorize(request, response, callback) {
-	console.log(response.headers);
-	
+	console.log(request.headers);
+
 	var options = {
 		url: 'http://localhost:3333/authorize',
 		method: 'GET',
