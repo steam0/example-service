@@ -38,7 +38,7 @@ app.get('/test', function (request, response) {
 
 function authorize(request, response, callback) {
 	var options = {
-		url: 'http://localhost:8080/auth/authorize',
+		url: 'http://localhost:3333/authorize',
 		method: 'GET',
 		headers: {
 			'Authorization': request.headers.authorization
