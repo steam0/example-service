@@ -30,7 +30,7 @@ app.get('/test', function (request, response) {
 				"working": "yes",
 				"testing": "no"
 			}*/
-			response.set('Content-Type', 'application/jsonres.set('Content-Type', 'text/plain');');
+			response.set('Content-Type', 'application/json');
 			return response.send(body);
 	});
 });
@@ -38,7 +38,7 @@ app.get('/test', function (request, response) {
 
 function authorize(request, response, callback) {
 	var options = {
-		url: 'http://localhost:8000/auth/authorize',
+		url: 'http://localhost:8080/auth/authorize',
 		method: 'GET',
 		headers: {
 			'Authorization': request.headers.authorization
