@@ -35,7 +35,7 @@ app.get('/test', function (request, response) {
 
 function authorize(request, response, callback) {
 	var options = {
-		url: 'http://localhost:8000/auth/authorize',
+		url: 'http://10.0.1.7:8000/auth/authorize',
 		method: 'GET',
 		headers: {
 			'Authorization': request.headers.authorization
@@ -49,7 +49,7 @@ function authorize(request, response, callback) {
 		 if (res && (res.statusCode === 200 || res.statusCode === 201)) {
 			 callback(err, res, body);
 		 } else {
-			 console.log("Access denied");
+			 console.log("Access denied:" + res.statusCode);
 			 response.statusCode = 500
 			 response.body = body;
 			 return response.end();
