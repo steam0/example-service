@@ -15,18 +15,7 @@ var server = app.listen(3000, function() {
 // API
 
 app.get('/test', function (request, response) {
-	console.log("Header input");
-	console.log(request.headers);
-	//console.log(request.query);
-
 	authorize(request, response, function (err, res, body) {
-			console.log("Yes");
-			console.log(err);
-			console.log(body);
-			/*var body = {
-				"working": "yes",
-				"testing": "no"
-			}*/
 			response.set('Content-Type', 'application/json');
 			return response.send(body);
 	});
@@ -41,9 +30,6 @@ function authorize(request, response, callback) {
 			'Authorization': request.headers.authorization
 		}
 	};
-
-	console.log("Header output");
-	console.log(options.headers);
 
 	requestClient(options, function(err, res, body) {
 		 if (res && (res.statusCode === 200 || res.statusCode === 201)) {
