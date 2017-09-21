@@ -15,6 +15,7 @@ var server = app.listen(3000, function() {
 // API
 
 app.get('/test', function (request, response) {
+	console.log("Header input");
 	console.log(request.headers);
 	//console.log(request.query);
 
@@ -33,15 +34,16 @@ app.get('/test', function (request, response) {
 
 
 function authorize(request, response, callback) {
-	console.log(request.headers);
-
 	var options = {
-		url: 'http://localhost:3333/authorize',
+		url: 'http://localhost:8000/auth/authorize',
 		method: 'GET',
 		headers: {
 			'Authorization': request.headers.authorization
 		}
 	};
+
+	console.log("Header output");
+	console.log(options.headers);
 
 	requestClient(options, function(err, res, body) {
 		 if (res && (res.statusCode === 200 || res.statusCode === 201)) {
