@@ -12,10 +12,6 @@ var server = app.listen(3000, function() {
 	console.log('Server is listening at http://%s:%s', host, port);
 });
 
-// Helpers
-
-
-
 // API
 
 app.get('/test', function (request, response) {
