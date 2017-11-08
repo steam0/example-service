@@ -13,15 +13,21 @@ var server = app.listen(3000, function() {
 });
 
 // API
-
 app.get('/test', function (request, response) {
+	console.log(request);
 	authorize(request, response, function (err, res, body) {
+			console.log(body);
 			response.set('Content-Type', 'application/json');
 			return response.send(body);
 	});
 });
 
 
+/**
+ * Authorize method
+ * Use this method to authorize requests using the
+ * auth service
+ */
 function authorize(request, response, callback) {
 	var options = {
 		url: 'http://10.0.1.7:8000/auth/authorize',
