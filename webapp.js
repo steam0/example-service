@@ -39,8 +39,8 @@ function authorize(request, response, callback) {
 		console.log("ip:" + server_ip)
 		console.log("port:" + server_port)
 		response.statusCode = 500;
-		return response.end("Missing auth server configuration.");
 
+		return response.end("Missing auth server configuration.");
 	}
 
 	var options = {
