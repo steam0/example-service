@@ -19,7 +19,8 @@
   "dependencies": {
     "cors": "^2.7.1",
     "express": "^4.3.2",
+    "path": "^0.12.7",
     "request": "2.82.0",
-    "path": "^0.12.7"
+    "teslajs": "^2.1.34"
   }
 }

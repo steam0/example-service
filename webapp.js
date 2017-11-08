@@ -1,6 +1,7 @@
 /* Web server */
 var express = require('express');
 var cors = require('cors');
+var teslajs = require('teslajs')
 var app = express();
 var requestClient = require('request');
 app.use(cors());
@@ -18,6 +19,7 @@ app.get('/test', function (request, response) {
 	authorize(request, response, function (err, res, body) {
 			console.log(body);
 			response.set('Content-Type', 'application/json');
+			response.statusCode = res.statusCode
 			return response.send(body);
 	});
 });
@@ -29,8 +31,20 @@ app.get('/test', function (request, response) {
  * auth service
  */
 function authorize(request, response, callback) {
+	var server_ip = process.env.AUTH_SERVER_IP;
+	var server_port = process.env.AUTH_SERVER_PORT;
+
+	if (server_ip == null || server_port == null) {
+		console.log("Missing auth server configuration.")
+		console.log("ip:" + server_ip)
+		console.log("port:" + server_port)
+		response.statusCode = 500;
+		return response.end("Missing auth server configuration.");
+
+	}
+
 	var options = {
-		url: 'http://10.0.1.7:8000/auth/authorize',
+		url: 'http://'+ process.env.AUTH_SERVER_IP + ':' + process.env.AUTH_SERVER_PORT + '/auth/authorize',
 		method: 'GET',
 		headers: {
 			'Authorization': request.headers.authorization
@@ -41,10 +55,13 @@ function authorize(request, response, callback) {
 		 if (res && (res.statusCode === 200 || res.statusCode === 201)) {
 			 callback(err, res, body);
 		 } else {
-			 console.log("Access denied:" + res.statusCode);
-			 response.statusCode = 500
-			 response.body = body;
-			 return response.end();
+			 	if (res) {
+			 		console.log("Access denied:" + res.statusCode);
+				}
+
+			 	response.statusCode = 500
+			 	response.body = body;
+			 	return response.end();
 		 }
 	 });
 
