@@ -20,9 +20,9 @@ var server = app.listen(3000, function() {
 
 // API
 app.get('/test', function (request, response) {
-	logger.log("info", request);
+	logger.log("info", "GET /test request");
 	authorize(request, response, function (err, res, body) {
-			logger.log("info", body);
+			logger.log("info", JSON.stringify(body));
 			producer.on('ready', function () {
 			  var message = 'Info message returned from example-service';
 
@@ -85,7 +85,7 @@ function authorize(request, response, callback) {
  * Use this Kafka config in all services
  */
  var kafka_ip = process.env.KAFKA_IP;
- var kafka_port = process.env.KAFAK_PORT;
+ var kafka_port = process.env.KAFKA_PORT;
 
  if (kafka_ip == null || kafka_port == null) {
 	 logger.log("error", "Missing kafka server configuration.")
