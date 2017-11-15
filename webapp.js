@@ -24,10 +24,18 @@ app.get('/test', function (request, response) {
 	authorize(request, response, function (err, res, body) {
 			logger.log("info", JSON.stringify(body));
 			producer.on('ready', function () {
+				logger.log("info", "Kafka producer is ready")
 			  var message = 'Info message returned from example-service';
 
 			  producer.send([{ topic: "node-test", messages: message}], function (err, result) {
-			    logger.log("info", err || result);
+					logger.log("info", "Producer send er fullført")
+					if (err) {
+						logger.log("error", err);
+					}
+
+					if (result) {
+						logger.log("info", result);
+					}
 			  });
 			});
 			response.set('Content-Type', 'application/json');
