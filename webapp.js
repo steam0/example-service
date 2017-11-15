@@ -21,6 +21,8 @@ var Producer = kafka.Producer;
 var Client = kafka.Client;
 var client = new Client(kafka_ip+':'+kafka_port);
 var producer = new Producer(client, { requireAcks: 1 });
+logger.log("info", "Kafka client " + JSON.stringify(client));
+logger.log("info", "Kafka producer " + JSON.stringify(producer));
 
 /* Web server */
 var express = require('express');
