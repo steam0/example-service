@@ -55,11 +55,12 @@ app.get('/test', function (request, response) {
 					if (result) {
 						logger.log("info", result);
 					}
+
+					response.set('Content-Type', 'application/json');
+					response.statusCode = res.statusCode
+					return response.send(body);
 			  });
 			});
-			response.set('Content-Type', 'application/json');
-			response.statusCode = res.statusCode
-			return response.send(body);
 	});
 });
 
