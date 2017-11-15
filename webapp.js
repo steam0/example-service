@@ -6,7 +6,6 @@ logger.add(logger.transports.Console, {'timestamp':true});
 /* Web server */
 var express = require('express');
 var cors = require('cors');
-var teslajs = require('teslajs')
 var app = express();
 var requestClient = require('request');
 
@@ -24,6 +23,13 @@ app.get('/test', function (request, response) {
 	logger.log("info", request);
 	authorize(request, response, function (err, res, body) {
 			logger.log("info", body);
+			producer.on('ready', function () {
+			  var message = 'Info message returned from example-service';
+
+			  producer.send([{ topic: "node-test", messages: message}], function (err, result) {
+			    logger.log("info", err || result);
+			  });
+			});
 			response.set('Content-Type', 'application/json');
 			response.statusCode = res.statusCode
 			return response.send(body);
@@ -72,5 +78,23 @@ function authorize(request, response, callback) {
 			 	return response.end();
 		 }
 	 });
-
 }
+
+/**
+ * Kafka init
+ * Use this Kafka config in all services
+ */
+ var kafka_ip = process.env.KAFKA_IP;
+ var kafka_port = process.env.KAFAK_PORT;
+
+ if (kafka_ip == null || kafka_port == null) {
+	 logger.log("error", "Missing kafka server configuration.")
+	 logger.log("error", "ip:" + kafka_ip)
+	 logger.log("error", "port:" + kafka_port)
+ }
+
+var kafka = require('kafka-node');
+var Producer = kafka.Producer;
+var Client = kafka.Client;
+var client = new Client(kafka_ip+':'+kafka_port);
+var producer = new Producer(client, { requireAcks: 1 });
