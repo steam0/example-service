@@ -3,6 +3,25 @@ var logger = require('winston');
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {'timestamp':true});
 
+/**
+ * Kafka init
+ * Use this Kafka config in all services
+ */
+ var kafka_ip = process.env.KAFKA_IP;
+ var kafka_port = process.env.KAFKA_PORT;
+
+ if (kafka_ip == null || kafka_port == null) {
+	 logger.log("error", "Missing kafka server configuration.")
+	 logger.log("error", "ip:" + kafka_ip)
+	 logger.log("error", "port:" + kafka_port)
+ }
+
+var kafka = require('kafka-node');
+var Producer = kafka.Producer;
+var Client = kafka.Client;
+var client = new Client(kafka_ip+':'+kafka_port);
+var producer = new Producer(client, { requireAcks: 1 });
+
 /* Web server */
 var express = require('express');
 var cors = require('cors');
@@ -87,22 +106,3 @@ function authorize(request, response, callback) {
 		 }
 	 });
 }
-
-/**
- * Kafka init
- * Use this Kafka config in all services
- */
- var kafka_ip = process.env.KAFKA_IP;
- var kafka_port = process.env.KAFKA_PORT;
-
- if (kafka_ip == null || kafka_port == null) {
-	 logger.log("error", "Missing kafka server configuration.")
-	 logger.log("error", "ip:" + kafka_ip)
-	 logger.log("error", "port:" + kafka_port)
- }
-
-var kafka = require('kafka-node');
-var Producer = kafka.Producer;
-var Client = kafka.Client;
-var client = new Client(kafka_ip+':'+kafka_port);
-var producer = new Producer(client, { requireAcks: 1 });
