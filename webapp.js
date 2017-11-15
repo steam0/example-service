@@ -3,27 +3,6 @@ var logger = require('winston');
 logger.remove(logger.transports.Console);
 logger.add(logger.transports.Console, {'timestamp':true});
 
-/**
- * Kafka init
- * Use this Kafka config in all services
- */
- var kafka_ip = process.env.KAFKA_IP;
- var kafka_port = process.env.KAFKA_PORT;
-
- if (kafka_ip == null || kafka_port == null) {
-	 logger.log("error", "Missing kafka server configuration.")
-	 logger.log("error", "ip:" + kafka_ip)
-	 logger.log("error", "port:" + kafka_port)
- }
-
-var kafka = require('kafka-node');
-var Producer = kafka.Producer;
-var Client = kafka.Client;
-var client = new Client(kafka_ip+':'+kafka_port);
-var producer = new Producer(client, { requireAcks: 1 });
-logger.log("info", "Kafka client " + JSON.stringify(client));
-logger.log("info", "Kafka producer " + JSON.stringify(producer));
-
 /* Web server */
 var express = require('express');
 var cors = require('cors');
@@ -44,22 +23,18 @@ app.get('/test', function (request, response) {
 	logger.log("info", "GET /test request");
 	authorize(request, response, function (err, res, body) {
 			logger.log("info", JSON.stringify(body));
-			var message = 'Info message returned from example-service';
+			var message = 'Info message returned from example-service with object ' + JSON.stringify(body);
 
+			// Async kafka message sending
 		  producer.send([{ topic: "node-test", messages: message}], function (err, result) {
-				logger.log("info", "Producer send er fullført")
 				if (err) {
 					logger.log("error", err);
 				}
-
-				if (result) {
-					logger.log("info", result);
-				}
-
-				response.set('Content-Type', 'application/json');
-				response.statusCode = res.statusCode
-				return response.send(body);
 			});
+
+			response.set('Content-Type', 'application/json');
+			response.statusCode = res.statusCode
+			return response.send(body);
 	});
 });
 
@@ -106,3 +81,26 @@ function authorize(request, response, callback) {
 		 }
 	 });
 }
+
+/**
+ * Kafka init
+ * Use this Kafka config in all services
+ */
+ var kafka_ip = process.env.KAFKA_IP;
+ var kafka_port = process.env.KAFKA_PORT;
+
+ if (kafka_ip == null || kafka_port == null) {
+	 logger.log("error", "Missing kafka server configuration.")
+	 logger.log("error", "ip:" + kafka_ip)
+	 logger.log("error", "port:" + kafka_port)
+ }
+
+var kafka = require('kafka-node');
+var Producer = kafka.Producer;
+var Client = kafka.Client;
+var client = new Client(kafka_ip+':'+kafka_port);
+var producer = new Producer(client, { requireAcks: 1 });
+
+producer.on('ready', function () {
+	logger.log("info", "Kafka producer is ready")
+});
