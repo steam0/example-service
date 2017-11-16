@@ -1,7 +1,7 @@
 /* Logging */
 var logger = require('winston');
 logger.remove(logger.transports.Console);
-logger.add(logger.transports.Console, {'timestamp':true});
+logger.add(logger.transports.Console, {'timestamp':true, 'colorize': true});
 
 /* Web server */
 var express = require('express');
